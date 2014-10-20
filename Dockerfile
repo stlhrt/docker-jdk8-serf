@@ -22,15 +22,11 @@ ADD supervisord-serf.conf /etc/supervisor/conf.d/supervisord-serf.conf
 RUN chmod 755 /opt/serf/*.sh
 
 #configure application launching
-RUN mkdir -p /opt/app/service
-RUN mkdir -p /opt/app/logs
 ADD supervisord-app.conf /etc/supervisor/conf.d/supervisord-app.conf
-ADD run-app.sh /opt/app/service/run-app.sh
-RUN chmod 755 /opt/app/service/*.sh
-ADD /run.sh /opt/run.sh
-RUN chmod 755 /opt/run.sh
 
 # Expose volume for additional serf config in JSON
 VOLUME /opt/serf/conf
 
-CMD ["/opt/run.sh"]
+ENV APP_CMD /bin/bash -c 'while true; do echo "Nothing..."; sleep 5; done'
+
+CMD ["supervisord", "-n"]
